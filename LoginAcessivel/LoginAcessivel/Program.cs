@@ -56,10 +56,9 @@ namespace LoginAcessivel
 
         static void altoContraste(string value)
         {
-            Console.WriteLine(value);
             RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Accessibility\HighContrast", true);
-            Console.WriteLine(key);
-            key.SetValue("Flags", 126);
+            key.SetValue("High Contrast Scheme", value);
+            System.Windows.Forms.SendKeys.SendWait("(%+{PRTSC})");
         }
     }
 }
