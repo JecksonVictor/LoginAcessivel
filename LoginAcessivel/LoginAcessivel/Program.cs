@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,8 +22,8 @@ namespace LoginAcessivel
         static string encontrarPreferenciasDeUsuario()
         {
             string nomeDeUsuario = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+
             string[] usuarios = Properties.Resources.users.Split('\n');
-            //string[] usuarios = System.IO.File.ReadAllLines(@"C:\users.txt");
             foreach (string usuario in usuarios)
             {
                 if (usuario.Contains(nomeDeUsuario))
@@ -36,10 +37,29 @@ namespace LoginAcessivel
         static void carregarPreferenciasDeUsuario(string usuario)
         {
             string[] preferencias = (usuario.Substring(usuario.IndexOf(':')+1)).Split(';');
-            foreach(string p in preferencias)
+            foreach(string preferencia in preferencias)
             {
-                Console.WriteLine(p);
+                Console.WriteLine("Ativando: " + preferencia);
+                ativarConfiguracao(preferencia);
             }
+        }
+
+        static void ativarConfiguracao(string preferencia)
+        {
+            if (preferencia.Contains("AltoContraste"))
+            {
+                preferencia = preferencia.Substring(preferencia.IndexOf('(')+1);
+                preferencia = preferencia.Substring(0, preferencia.IndexOf(')'));
+                altoContraste(preferencia);
+            }
+        }
+
+        static void altoContraste(string value)
+        {
+            Console.WriteLine(value);
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Accessibility\HighContrast", true);
+            Console.WriteLine(key);
+            key.SetValue("Flags", 126);
         }
     }
 }
