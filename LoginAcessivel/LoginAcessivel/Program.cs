@@ -13,18 +13,15 @@ namespace LoginAcessivel
             string preferenciasDoUsuario = encontrarPreferenciasDeUsuario();
             if (preferenciasDoUsuario != null)
             {
-               
+                carregarPreferenciasDeUsuario(preferenciasDoUsuario);
             }
-            
             //else:TERMINATE
-            
-
         }
 
         static string encontrarPreferenciasDeUsuario()
         {
             string nomeDeUsuario = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            string[] usuarios = System.IO.File.ReadAllLines(@"C:\Users\jecks\Documents\users.txt");
+            string[] usuarios = Properties.Resources.users.Split('\n');
             //string[] usuarios = System.IO.File.ReadAllLines(@"C:\users.txt");
             foreach (string usuario in usuarios)
             {
@@ -38,7 +35,11 @@ namespace LoginAcessivel
 
         static void carregarPreferenciasDeUsuario(string usuario)
         {
-
+            string[] preferencias = (usuario.Substring(usuario.IndexOf(':')+1)).Split(';');
+            foreach(string p in preferencias)
+            {
+                Console.WriteLine(p);
+            }
         }
     }
 }
